@@ -4,12 +4,13 @@ def print_header
 end
 
 def print(students)
-  students.each_with_index do |student, index|
-    if student[:name].size < 12
-    puts "#{index+1}: #{student[:name]} (#{student[:cohort]} cohort)"
+  i = 0
+    loop do while i <= students.size-1 
+      puts "#{i+1}: #{students[i][:name]} (#{students[0][:cohort]} cohort)"
+      i += 1
     end
   end
-end
+  end
 
 def print_footer(students)
   puts "Overall, we have #{students.count} great students"
