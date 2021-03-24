@@ -6,7 +6,8 @@ end
 def print(students)
   i = 0
     loop do while i <= students.size-1 
-      puts "#{i+1}: #{students[i][:name]} (#{students[i][:cohort]} cohort) (Hobbies: #{students[i][:hobbies]}) (Date of birth: #{students[i][:dateofbirth]})"
+      returnedstring = "#{i+1}: #{students[i][:name]} (#{students[i][:cohort]} Cohort) (Hobbies: #{students[i][:hobbies]}) (Date of birth: #{students[i][:dateofbirth]})"
+      puts returnedstring.center(100)
       i += 1
     end
   end
@@ -22,15 +23,15 @@ def input_students
 
   students = []
 
-  name = gets.chomp
+  name = gets.chomp.capitalize
 
   while !name.empty? do 
-    puts "Please enter their hobbies"
-    hobbies = gets.chomp
+    puts "Please enter their Hobbies"
+    hobbies = gets.chomp.capitalize
   
     puts "Please enter their Date of Birth"
-    dateofbirth = gets.chomp
-    students << {name: name, cohort: :march, dateofbirth: dateofbirth, hobbies: hobbies}
+    dateofbirth = gets.chomp.capitalize
+    students << {name: name, cohort: 'March', dateofbirth: dateofbirth, hobbies: hobbies}
     puts "Now we have #{students.count} students"
     puts "Pleae enter the names of the students"
     name = gets.chomp
