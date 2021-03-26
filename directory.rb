@@ -34,35 +34,35 @@ def input_students
   puts "Please enter the names of the students"
   puts "To finish, just hit return twice"
 
-  name = gets.chomp.capitalize
+  name = STDIN.gets.chomp.capitalize
 
   puts "Your name is #{name} is that correct? Please type Y / N"
-  choice = gets.chomp
+  choice = STDIN.gets.chomp
 
   while choice == 'N' || choice.empty?
     puts "Please enter the names of the students" 
-    name = gets.chomp.capitalize
+    name = STDIN.gets.chomp.capitalize
     puts "Your name is #{name} is that correct? Please type Y / N"
-    choice = gets.chomp
+    choice = STDIN.gets.chomp
   end
 
   while !name.empty? do 
     puts "Which cohort are they in?"
-    cohort = gets.chomp.to_sym.capitalize
+    cohort = STDIN.gets.chomp.to_sym.capitalize
 
     if cohort.empty?
         cohort = :March
     end
 
     puts "Please enter their Hobbies"
-    hobbies = gets.chomp.capitalize
+    hobbies = STDIN.gets.chomp.capitalize
 
     if hobbies.empty?
       hobbies = "Surfing, Climbing"
     end
   
     puts "Please enter their Date of Birth"
-    dateofbirth = gets.chomp.capitalize
+    dateofbirth = STDIN.gets.chomp.capitalize
 
     if dateofbirth.empty?
       dateofbirth = "01/01/91"
@@ -77,7 +77,7 @@ def input_students
     end
 
     puts "Please enter the names of the students"
-    name = gets.chomp
+    name = STDIN.gets.chomp
   end
   
   results = @students.map.sort_by { |hsh| hsh[:cohort] }
@@ -120,7 +120,7 @@ end
 def interactive_menu
   loop do 
     print_menu
-    process(gets.chomp)
+    process(STDIN.gets.chomp)
   end
 end
 
@@ -135,8 +135,8 @@ def save_students
   file.close
 end
 
-def load_students
-  file = File.open("students.csv", "r")
+def load_students(filename = "students.csv")
+  file = File.open(filename, "r")
   file.readlines.each do |line|
   name, cohort = line.chomp.split(',')
     @students << {name: name, cohort: cohort.to_sym}
@@ -144,4 +144,17 @@ def load_students
   file.close
 end
 
+def try_load_students
+  filename = ARGV.first
+  return if filename.nil?
+  if File.exists?(filename)
+    load_students(filename)
+    puts "Loads #{@students.count} from #{filename}"
+  else 
+    puts "Sorry, #{filename} doesn't exist."
+    exit
+  end
+end
+
+load_students
 interactive_menu
