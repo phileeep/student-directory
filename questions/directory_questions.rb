@@ -5,11 +5,17 @@ end
 
 def print(students)
   i = 0
-    loop do while i <= students.size-1 
-      returnedstring = "#{i+1}: #{students[i][:name]} (#{students[i][:cohort]} Cohort) (Hobbies: #{students[i][:hobbies]}) (Date of birth: #{students[i][:dateofbirth]})"
+
+  puts "Which months cohort do you want to show?"
+  month = gets.chomp.to_sym.capitalize
+
+  loop do while i <= students.size-1 
+    returnedstring = "#{i+1}: #{students[i][:name]} (#{students[i][:cohort]} Cohort) (Hobbies: #{students[i][:hobbies]}) (Date of birth: #{students[i][:dateofbirth]})"
+    if students[i][:cohort] == month
       puts returnedstring.center(100)
-      i += 1
     end
+    i += 1
+  end
   end
   end
 
@@ -17,7 +23,7 @@ def print_footer(students)
   puts "Overall, we have #{students.count} great students"
 end
 
-def input_students(name = "John")
+def input_students
   puts "Please enter the names of the students"
   puts "To finish, just hit return twice"
 
@@ -37,31 +43,69 @@ def input_students(name = "John")
 
   while !name.empty? do 
     puts "Which cohort are they in?"
-    cohort = gets.chomp.to_sym
+    cohort = gets.chomp.to_sym.capitalize
 
-    while cohort.empty?
-      puts "Which cohort are they in?"
-      cohort = gets.chomp.to_sym
-      if cohort.empty?
-        cohort = "march"
-      end
+    if cohort.empty?
+        cohort = :March
+    end
 
     puts "Please enter their Hobbies"
     hobbies = gets.chomp.capitalize
+
+    if hobbies.empty?
+      hobbies = "Surfing, Climbing"
+    end
   
     puts "Please enter their Date of Birth"
     dateofbirth = gets.chomp.capitalize
+
+    if dateofbirth.empty?
+      dateofbirth = "01/01/91"
+    end
+  
     students << {name: name, cohort: cohort, dateofbirth: dateofbirth, hobbies: hobbies}
-    puts "Now we have #{students.count} students"
-    puts "Pleae enter the names of the students"
+
+    if students.count < 2 
+      puts "Now we have #{students.count} student"
+    elsif students.count >= 2 
+      puts "Now we have #{students.count} students"
+    end
+
+    puts "Please enter the names of the students"
     name = gets.chomp
+  end
+  
+  results = students.map.sort_by { |hsh| hsh[:cohort] }
+
+  return results
+
+end
+
+def interactive_menu
+  students = []
+  loop do 
+    puts "1. Input the students"
+    puts "2. Show the students"
+    puts "9. Exit"
+
+    selection = gets.chomp
+
+    case selection
+    when "1"
+      students = input_students
+    when "2"
+      print_header
+      print(students)
+      print_footer(students)
+    when "9"
+      exit
+    else 
+      puts "I don't know what you meant, try again"
+    end 
   end
 end
 
-  students
-end
-
-students = input_students
+interactive_menu
 print_header
 print(students)
 print_footer(students)
