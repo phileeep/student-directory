@@ -38,8 +38,17 @@ def input_students
 
     while !name.empty?
 
-      puts "Your name is #{name} is that correct? Please type Y / N"
-      choice = STDIN.gets.chomp
+      while choice.upcase != 'Y'
+        puts "Your name is #{name} is that correct? Please type Y / N"
+        choice = STDIN.gets.chomp
+        if choice.upcase == 'N'
+        puts "Please enter your name again"
+        name = STDIN.gets.chomp.capitalize
+        else 
+          break
+        end
+      end
+      
 
       puts "Which cohort are they in?"
       cohort = STDIN.gets.chomp.to_sym.capitalize
@@ -105,8 +114,8 @@ end
 def print_menu
   puts "1. Input the students"
   puts "2. Show the students"
-  puts "3. Save the list to students.csv"
-  puts "4. Load the list from students.csv"
+  puts "3. Save the list"
+  puts "4. Load the list"
   puts "9. Exit" 
 end
 	
@@ -125,21 +134,27 @@ def interactive_menu
 end
 
 def save_students
-  file = File.open("students.csv", "w")
+  puts "What name do you want for the file?"
+  filename = gets.chomp + '.csv'
+  file = File.open(filename, "w")
   @students.each do |student|
     student_data =[student[:name], student[:cohort]]
     csv_line = student_data.join(',')
     file.puts csv_line
   end
+  puts "Saved to #{filename}"
   file.close
 end
 
-def load_students(filename = "students.csv")
-  file = File.open(filename, "r")
+def load_students
+  puts "What file do you want to open?"
+  filename = gets.chomp 
+  file = File.open("./#{filename}", "r")
   file.readlines.each do |line|
   name, cohort = line.chomp.split(',')
     @students << {name: name, cohort: cohort.to_sym}
   end
+  puts "Loaded #{file}"
   file.close
 end
 
