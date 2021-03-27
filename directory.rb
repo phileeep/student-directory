@@ -31,53 +31,47 @@ def print_footer
 end
 
 def input_students
-  puts "Please enter the names of the students"
-  puts "To finish, just hit return twice"
+  choice = ''
 
+  puts "Please enter the names of the students" 
   name = STDIN.gets.chomp.capitalize
 
-  puts "Your name is #{name} is that correct? Please type Y / N"
-  choice = STDIN.gets.chomp
+    while !name.empty?
 
-  while choice == 'N' || choice.empty?
-    puts "Please enter the names of the students" 
-    name = STDIN.gets.chomp.capitalize
-    puts "Your name is #{name} is that correct? Please type Y / N"
-    choice = STDIN.gets.chomp
-  end
+      puts "Your name is #{name} is that correct? Please type Y / N"
+      choice = STDIN.gets.chomp
 
-  while !name.empty? do 
-    puts "Which cohort are they in?"
-    cohort = STDIN.gets.chomp.to_sym.capitalize
+      puts "Which cohort are they in?"
+      cohort = STDIN.gets.chomp.to_sym.capitalize
 
-    if cohort.empty?
-        cohort = :March
-    end
+      if cohort.empty?
+          cohort = :March
+      end
 
-    puts "Please enter their Hobbies"
-    hobbies = STDIN.gets.chomp.capitalize
+      puts "Please enter their Hobbies"
+      hobbies = STDIN.gets.chomp.capitalize
 
-    if hobbies.empty?
-      hobbies = "Surfing, Climbing"
-    end
-  
-    puts "Please enter their Date of Birth"
-    dateofbirth = STDIN.gets.chomp.capitalize
+      if hobbies.empty?
+        hobbies = "Surfing, Climbing"
+      end
+    
+      puts "Please enter their Date of Birth"
+      dateofbirth = STDIN.gets.chomp.capitalize
 
-    if dateofbirth.empty?
-      dateofbirth = "01/01/91"
-    end
-  
-    @students << {name: name, cohort: cohort, dateofbirth: dateofbirth, hobbies: hobbies}
+      if dateofbirth.empty?
+        dateofbirth = "01/01/91"
+      end
+    
+      @students << {name: name, cohort: cohort, dateofbirth: dateofbirth, hobbies: hobbies}
 
-    if @students.count < 2 
-      puts "Now we have #{@students.count} student"
-    elsif @students.count >= 2 
-      puts "Now we have #{@students.count} students"
-    end
-
-    puts "Please enter the names of the students"
-    name = STDIN.gets.chomp
+      if @students.count < 2 
+        puts "Now we have #{@students.count} student"
+      elsif @students.count >= 2 
+        puts "Now we have #{@students.count} students"
+      end
+      
+      puts "Please enter the names of the students" 
+      name = STDIN.gets.chomp.capitalize
   end
   
   results = @students.map.sort_by { |hsh| hsh[:cohort] }
@@ -86,17 +80,22 @@ def input_students
 
 end
 
-def process(selection)
+def user_selection(selection)
   case selection
     when "1"
+      puts "Selected To Input"
       input_students
     when "2"
+      puts "Selected To Show Students"
       show_students
     when "3"
+      puts "Selected To Save The List"
       save_students
     when "4"
+      puts "Selected To Load the List"
       load_students
     when "9"
+      puts "Selected Exit"
       exit
     else 
       puts "I don't know what you meant, try again"
@@ -112,6 +111,7 @@ def print_menu
 end
 	
 def show_students
+  load_students
   print_header
   print_students_list
   print_footer
@@ -120,13 +120,12 @@ end
 def interactive_menu
   loop do 
     print_menu
-    process(STDIN.gets.chomp)
+    user_selection(STDIN.gets.chomp)
   end
 end
 
 def save_students
   file = File.open("students.csv", "w")
-
   @students.each do |student|
     student_data =[student[:name], student[:cohort]]
     csv_line = student_data.join(',')
@@ -156,5 +155,4 @@ def try_load_students
   end
 end
 
-load_students
 interactive_menu
